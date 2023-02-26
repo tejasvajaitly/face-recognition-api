@@ -1,7 +1,7 @@
 const handleRegister = (req, res, db, bcrypt) => {
   const { name, email, password } = req.body;
 
-  const passwordHash = bcrypt.hashSync(password, saltRounds);
+  const passwordHash = bcrypt.hashSync(password, (saltRounds = 10));
 
   db.transaction((trx) => {
     return db
@@ -28,5 +28,5 @@ const handleRegister = (req, res, db, bcrypt) => {
 };
 
 module.exports = {
-  handleRegister: this.handleRegister,
+  handleRegister: handleRegister,
 };

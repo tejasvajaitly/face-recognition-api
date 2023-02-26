@@ -2,8 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 const knex = require("knex");
-
-const saltRounds = 10;
+const register = require("./controllers/register");
+const signin = require("./controllers/signin");
 
 const db = knex({
   client: "pg",
@@ -25,24 +25,7 @@ app.get("/", (req, res) => {
   res.json("working");
 });
 
-app.post("/signin", (req, res) => {
-  const { email, password } = req.body;
-
-  db.select("email", "hash")
-    .from("login")
-    .where("email", "=", email)
-    .then((data) => {
-      if (bcrypt.compareSync(password, data[0].hash)) {
-        db.select("*")
-          .from("users")
-          .where("email", "=", email)
-          .then((user) => res.json(user[0]));
-      } else {
-        res.status(400).json("email and password might be wrong");
-      }
-    })
-    .catch((err) => res.status(400).json("some error"));
-});
+app.post("/signin", (req, res) => signin.handleSignin(req, res, db, bcrypt));
 
 app.post("/register", (req, res) =>
   register.handleRegister(req, res, db, bcrypt)
