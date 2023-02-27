@@ -29,6 +29,6 @@ app.post("/register", (req, res) => register.handleRegister(req, res, db, bcrypt
 app.put("/imageentries", (req, res) => image.handleImageEntries(req, res, db));
 app.post("/detectface", (req, res) => image.handleClarifaiApiCall(req, res));
 
-app.listen(3001, () => {
-  console.log("app is running on port 3001");
+app.listen(process.env.PORT || 3001, () => {
+  console.log(`app is running on port ${process.env.PORT}`);
 });
